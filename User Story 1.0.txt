@@ -1,0 +1,173 @@
+Classy Llama Programming Test – Person Search – User Story 1.0		
+Developer: Mike Haynes
+
+User Story: As a business owner, I want to maintain and search a list of customers using address information as search criteria, so that I can view customers located within a particular area.
+
+Use Case: 1 Search customers
+
+Goal in Context: Business Owner enters a full or partial address as search criteria, expects to see a list of customers and their respective addresses which meet the search criteria.
+Scope: Application
+Level: Primary task
+Primary Actor: Business Owner, any agent acting for the Business Owner
+
+MAIN SUCCESS SCENARIO
+
+1. Business Owner types in one or more fields of an address and submits entry.
+2. Application accepts the fields typed in by the Business Owner.
+3. Application delivers a list of customers and their full addresses found with matching values in the fields entered by the Business Owner.
+4. Business Owner sees the list delivered by the Application.
+
+EXTENSIONS
+
+1a. Business Owner desires to view all customers.
+1a1. Deliver a list of all customers and their full addresses.
+1b. Business Owner desires to add, edit, delete, or unlink customer or address.
+1b1. Provide Business owner the ability to add a customer or address (use case 2).
+1b2. Provide Business owner with ability to edit a customer or address (use case 3).
+1b3. Provide Business owner with ability to delete a customer or address (use case 4).
+1b4. Provide Business owner with ability to unlink a customer-address relation (use case 5).
+2a. Application detects invalid data in the fields typed in by Business Owner.
+2a1. Notify Business Owner of invalid data and prompt to try again.
+3a. Application finds no matching customers.
+3a1. Deliver message stating the search was unsuccessful.
+4a. Business Owner wants to do another search.
+4a1. Provide Business Owner the means to start a new search.
+
+
+Use Case: 2 Add customer or address
+
+Goal in Context: Business Owner can add a customer and/or address.
+Scope: Application
+Level: Primary task
+Primary Actor: Business Owner, any agent acting for the Business Owner
+
+MAIN SUCCESS SCENARIO
+
+1. Business Owner selects an option to add a customer and address.
+2. Application provides Business Owner the fields necessary to fill customer data and address data respectively.
+3. Business Owner types in the data and submits entry.
+4. Application accepts the data typed in by the Business Owner.
+5. Application displays the data to the Business owner and asks for confirmation.
+6. Business Owner confirms.
+7. Application stores data and notifies Business owner of successful completion of operation.
+8. Business Owner sees the operation was successful.
+9. Business Owner can view new data in a search.
+
+EXTENSIONS
+
+2a. Business Owner wants to add a customer to an existing address from previous search.
+2a1. Provide Business Owner the fields necessary to fill new customer data, displaying existing address data in read-only mode.
+2b. Business Owner wants to add an address to an existing customer from previous search.
+2b1. Provide Business Owner the fields necessary to fill new address data, displaying existing customer data in read-only mode.
+3a. Business Owner elects to cancel operation.
+3a1. Cancel operation and return to previous state.
+3b. Business Owner elects to clear entered data.
+3b1. Confirm desire to clear data fields.
+3b2. Clear data fields.
+4a. Application detects invalid data in the fields typed in by Business Owner.
+4a1. Notify Business Owner of invalid data and prompt to try again or cancel.
+4b. Application detects customer and address records already exist, but are not linked.
+4b1. Display the customer and address records in read-only mode, with option to link them.
+4c. Application detects customer and address records already exist, and are already linked.
+4c1. Notify Business Owner of duplicate data error.
+6a. Business Owner Declines.
+6a1. Cancel operation and return to previous state.
+7a. Application fails to store data.
+7a1. Notify Business Owner of failure and suggest possible steps for recovery.
+8a. Business Owner sees the operation was not successful.
+8a1. Business Owner can see possible steps for recovery.
+
+
+Use Case: 3 Edit customer or address
+
+Goal in Context: Business Owner can edit a customer or address.
+Scope: Application
+Level: Primary task
+Primary Actor: Business Owner, any agent acting for the Business Owner
+
+MAIN SUCCESS SCENARIO
+
+1. Business Owner selects an option from previous search result to edit a customer or address.
+2. Application provides Business Owner editable fields containing current data for the customer or address.
+3. Business Owner types in changes to the data and submits entry. 
+4. Application accepts the data changes typed in by the Business Owner.
+5. Application displays the data changes to the Business owner and asks for confirmation.
+6. Business Owner confirms.
+7. Application updates data and notifies Business owner of successful completion of operation.
+8. Business Owner sees the operation was successful.
+9. Business Owner can view updated data in a search.
+
+EXTENSIONS
+
+3a. Business Owner elects to cancel operation.
+3a1. Cancel operation and return to previous state.
+4a. Application detects invalid data in the fields typed in by Business Owner.
+4a1. Notify Business Owner of invalid data and prompt to try again or cancel.
+4b. Application detects duplicate data entry in the fields typed in by Business Owner.
+4b1. Notify Business Owner of duplicate data and provide option to work with existing data or cancel.
+6a. Business Owner declines.
+6a1. Cancel operation and return to previous state.
+7a. Application fails to update data.
+7a1. Notify Business Owner of failure and suggest possible steps for recovery.
+8a. Business Owner sees the operation was not successful.
+8a1. Business Owner can see possible steps for recovery.
+
+
+Use Case: 4 Delete customer and address
+
+Goal in Context: Business Owner can delete a customer and address.
+Scope: Application
+Level: Primary task
+Primary Actor: Business Owner, any agent acting for the Business Owner
+
+MAIN SUCCESS SCENARIO
+
+1. Business Owner selects an option from previous search result to delete a customer and address.
+2. Application asks Business Owner for confirmation.
+3. Business Owner confirms.
+4. Application deletes selected data and notifies Business owner of successful completion of operation.
+5. Business Owner sees the operation was successful.
+6. Business Owner can no longer view deleted data in a search.
+
+EXTENSIONS
+
+3a. Business Owner declines.
+3a1. Cancel operation and return to previous state.
+4a. Application fails to delete data.
+4a1. Notify Business Owner of failure and suggest possible steps for recovery.
+4b. Application detects that a deleted address will create one or more orphaned customer records (any other customer record with no other linked address, which will be unsearchable by address field after this operation).
+4b1. Delete customer, but do not delete an address record if another customer record is attached to it.
+4c.  Application detects that a deleted customer will create one or more orphaned address records (any other address record with no other linked customer, which will provide no customer search results for the address after this operation).
+4c1. Provide Business Owner the option to either continue with customer delete or to unlink the customer with the address.
+5a. Business Owner sees the operation was not successful.
+5a1. Business Owner sees possible steps for recovery. 
+
+
+Use Case: 5 Unlink customer and address
+
+Goal in Context: Business Owner can unlink the connection between a customer and address.
+Scope: Application
+Level: Primary task
+Primary Actor: Business Owner, any agent acting for the Business Owner
+
+MAIN SUCCESS SCENARIO
+
+1. Business Owner selects an option from previous search result to unlink a customer from an address.
+2. Application asks Business Owner for confirmation.
+3. Business Owner confirms.
+4. Application unlinks the selected records and notifies Business owner of successful completion of operation.
+5. Business Owner sees the operation was successful.
+6. Business Owner can no longer see the customer linked with the address in a search.
+
+EXTENSIONS
+
+3a. Business Owner declines.
+3a1. Cancel operation and return to previous state.
+4a. Application fails to unlink the data.
+4a1. Notify Business Owner of failure and suggest possible steps for recovery.
+4b. Application detects that the unlink operation will orphan the customer record (the customer record will have no other corresponding address, rendering it unsearchable by address field).
+4b1. Provide option to delete customer, or cancel the operation.
+4c.  Application detects that the unlink operation will orphan the address record (the address record will have no other corresponding customer, rendering no customer search results for the specific address). 
+4c1. Provide Business Owner the option to either continue with unlink, delete the address record, or cancel the operation.
+5a. Business Owner sees the operation was not successful.
+5a1. Business Owner sees possible steps for recovery. 
