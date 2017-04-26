@@ -1,0 +1,15 @@
+Description
+
+	• Create a program containing these object types: Search, Address, and Person
+	• Addresses are associated with the Person object in a many to many relationship (one Person can have many Addresses but if two Person objects have the same address they should use the same Address object)
+	• If two people have the same address, the same Address object should be linked to both Person objects
+	• The Search object should be able to: (1) search for Person objects by choosing an Address field to search on and (2) pass in an Address object and receive Person objects who have the Address object attached
+	• Objects should be made to persist in a database table
+  
+
+Deliverables
+
+	• A list of questions (if any) to complete this task, an estimate on how long this would take to complete, and user stories explaining a few use cases you could see this being used for [delivered before coding]
+	• Code that functions as specified with the ability to create, delete, and edit both the Person and Address objects
+	• A function that runs through and uses the functionality of the three objects
+	• The actual time it took to complete as turned in.
