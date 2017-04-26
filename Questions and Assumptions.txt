@@ -1,0 +1,24 @@
+Classy Llama Programming Test – Person Search – Questions & Assumptions
+
+Developer: Mike Haynes
+
+
+1. I assume Addresses will be formatted as if they are within the continental United States including Alaska, and Hawaii.
+
+2. For the Address→state, is a two-character abbreviation, full state name, or both preferred?
+
+3. I assume a Person will consist of a first and last name, and that a middle name/initial will be optional.
+
+4. I assume that security (user ID, password, etc.) is either addressed in another project or is otherwise unnecessary.
+
+5. In writing the use cases, it became apparent that because of the many-to-many association between Person and Address, an “unlink” feature would be needed in cases where an existing Person and Address are to no longer be associated, but one or both of them still have other associations which require them to remain active, thus a “delete” would not be feasible. I am assuming that this is acceptable.
+
+6. For the delete function, I assume that it is preferred to use a “soft delete” (record remains in the table, but is flagged as deleted) as opposed to a “hard delete” (record is actually dropped from the table).
+
+7. I assume that an “undelete” feature is not required, but as is made apparent in #6, could be implemented at a later date if requested.
+
+8. I assume that for searches, that an exact match on search fields entered is to be used, but will not be case sensitive.
+
+9. Per your statement, “Objects should be made to persist in a database table.” I assume this refers to the Person and Address objects, not the Search object.
+
+10. For a search, I assume that more than one address field can be chosen (up to the entire address) to refine the search, and thus is not limited to one field only. 
