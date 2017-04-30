@@ -1,0 +1,301 @@
+<html>
+<head>
+<script>
+function showResult() 
+{
+  var addr1 = document.getElementById("Addr1").value.trim();
+  var addr2 = document.getElementById("Addr2").value.trim();
+  var addr3 = document.getElementById("Addr3").value.trim();
+  var city = document.getElementById("City").value.trim();
+  var state = document.getElementById("State").value.trim();
+  var stateabbr = document.getElementById("StateAbbr").value.trim();
+  var zipcode = document.getElementById("ZipCode").value.trim();
+  var zipcode4 = document.getElementById("ZipCode4").value.trim();
+  document.getElementById("searchresultMessage").innerHTML="";
+  if (window.XMLHttpRequest) 
+  {
+    // code for IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttp=new XMLHttpRequest();
+  } else 
+  {  // code for IE6, IE5
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xmlhttp.onreadystatechange=function() 
+  {
+    if (this.readyState==4 && this.status==200) 
+    {
+      document.getElementById("searchresult").innerHTML="Search Result<br/>"+this.responseText;
+      document.getElementById("searchresult").style.border="1px solid #A5ACB2";
+    }
+  }
+  xmlhttp.open("GET","addressinput.php?action=search&addr1="+addr1+"&addr2="+addr2+"&addr3="+addr3+"&city="+city+"&state="+
+    state+"&stateabbr="+stateabbr+"&zipcode="+zipcode+"&zipcode4="+zipcode4,true);
+  xmlhttp.send();
+}
+
+function addPerson()
+{
+  var addr1 = document.getElementById("Addr1").value.trim();
+  var addr2 = document.getElementById("Addr2").value.trim();
+  var addr3 = document.getElementById("Addr3").value.trim();
+  var city = document.getElementById("City").value.trim();
+  var state = document.getElementById("State").value.trim();
+  var stateabbr = document.getElementById("StateAbbr").value.trim();
+  var zipcode = document.getElementById("ZipCode").value.trim();
+  var zipcode4 = document.getElementById("ZipCode4").value.trim();
+
+  var first = document.getElementById("First").value.trim();
+  var middle = document.getElementById("Middle").value.trim();
+  var last = document.getElementById("Last").value.trim();
+  
+  var addressString = addr1+addr2+addr3+city+state+stateabbr+zipcode+zipcode4;	  
+  if (addressString.length == 0) 
+  {
+  		document.getElementById("searchresultMessage").innerHTML="Address must be filled in to submit new record";
+  		return;
+  }
+  if (first.length == 0) 
+  {
+  		document.getElementById("searchresultMessage").innerHTML="First Name must not be blank";
+  		return;
+  }
+  if (last.length == 0) 
+  {
+  		document.getElementById("searchresultMessage").innerHTML="Last Name must not be blank";
+  		return;
+  }
+  if (addr1.length == 0)
+  {
+  		document.getElementById("searchresultMessage").innerHTML="Address Line 1 must not be blank";
+  		return;
+  }
+  if (city.length == 0)
+  {
+  		document.getElementById("searchresultMessage").innerHTML="City must not be blank";
+  		return;
+  }
+  if (state.length == 0 && stateabbr.length == 0)
+  {
+  		document.getElementById("searchresultMessage").innerHTML="State must not be blank";
+  		return;
+  }
+  if (stateabbr.length == 1 || stateabbr.length > 2)
+  {
+  		document.getElementById("searchresultMessage").innerHTML="State Abbreviation must contain two characters";
+  		return;
+  }
+  if (zipcode.length == 0)
+  {
+  		document.getElementById("searchresultMessage").innerHTML="Zip code must not be blank";
+  		return;
+  }
+  if (zipcode.length != 5)
+  {
+  		document.getElementById("searchresultMessage").innerHTML="Zip code must be 5 digits";
+  		return;
+  }
+  if (zipcode4.length != 0 && zipcode4.length != 4)
+  {
+  		document.getElementById("searchresultMessage").innerHTML="Zip code extension must be 4 digits or left blank";
+  		return;
+  }
+  if (isNaN(zipcode) == true)
+  {
+  		document.getElementById("searchresultMessage").innerHTML="Zip code must be a 5 digit integer";
+  		return;
+  }
+  if (zipcode4.length > 0 && isNaN(zipcode) == true)
+  {
+  		document.getElementById("searchresultMessage").innerHTML="Zip code extension must be a 4 digit integer or left blank";
+  		return;
+  }
+  document.getElementById("searchresultMessage").innerHTML="";
+  
+  if (window.XMLHttpRequest) 
+  {
+    // code for IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttp=new XMLHttpRequest();
+  } else 
+  {  // code for IE6, IE5
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xmlhttp.onreadystatechange=function() 
+  {
+    if (this.readyState==4 && this.status==200) 
+    {
+      document.getElementById("searchresult").innerHTML="Record Added:<br/>"+this.responseText;
+      document.getElementById("searchresult").style.border="1px solid #A5ACB2";
+    }
+  }
+  xmlhttp.open("GET","addressinput.php?action=add&first="+first+"&middle="+middle+"&last="+last+"&addr1="+
+    addr1+"&addr2="+addr2+"&addr3="+addr3+"&city="+city+"&state="+
+    state+"&stateabbr="+stateabbr+"&zipcode="+zipcode+"&zipcode4="+zipcode4,true);
+  xmlhttp.send();
+}
+
+function submitChange(rowId)
+{
+  var addr1 = document.getElementById("Addr1X").value.trim();
+  var addr2 = document.getElementById("Addr2X").value.trim();
+  var addr3 = document.getElementById("Addr3X").value.trim();
+  var city = document.getElementById("CityX").value.trim();
+  var state = document.getElementById("StateX").value.trim();
+  var stateabbr = document.getElementById("StateAbbrX").value.trim();
+  var zipcode = document.getElementById("ZipCodeX").value.trim();
+  var zipcode4 = document.getElementById("ZipCode4X").value.trim();
+
+  var first = document.getElementById("FirstX").value.trim();
+  var middle = document.getElementById("MiddleX").value.trim();
+  var last = document.getElementById("LastX").value.trim();
+  
+  var addressString = addr1+addr2+addr3+city+state+stateabbr+zipcode+zipcode4;	  
+  if (addressString.length == 0) 
+  {
+  		document.getElementById("searchresultMessage").innerHTML="Address must be filled in to submit new record";
+  		return;
+  }
+  if (first.length == 0) 
+  {
+  		document.getElementById("searchresultMessage").innerHTML="First Name must not be blank";
+  		return;
+  }
+  if (last.length == 0) 
+  {
+  		document.getElementById("searchresultMessage").innerHTML="Last Name must not be blank";
+  		return;
+  }
+  if (addr1.length == 0)
+  {
+  		document.getElementById("searchresultMessage").innerHTML="Address Line 1 must not be blank";
+  		return;
+  }
+  if (city.length == 0)
+  {
+  		document.getElementById("searchresultMessage").innerHTML="City must not be blank";
+  		return;
+  }
+  if (state.length == 0 && stateabbr.length == 0)
+  {
+  		document.getElementById("searchresultMessage").innerHTML="State must not be blank";
+  		return;
+  }
+  if (stateabbr.length == 1 || stateabbr.length > 2)
+  {
+  		document.getElementById("searchresultMessage").innerHTML="State Abbreviation must contain two characters";
+  		return;
+  }
+  if (zipcode.length == 0)
+  {
+  		document.getElementById("searchresultMessage").innerHTML="Zip code must not be blank";
+  		return;
+  }
+  if (zipcode.length != 5)
+  {
+  		document.getElementById("searchresultMessage").innerHTML="Zip code must be 5 digits";
+  		return;
+  }
+  if (zipcode4.length != 0 && zipcode4.length != 4)
+  {
+  		document.getElementById("searchresultMessage").innerHTML="Zip code extension must be 4 digits or left blank";
+  		return;
+  }
+  if (isNaN(zipcode) == true)
+  {
+  		document.getElementById("searchresultMessage").innerHTML="Zip code must be a 5 digit integer";
+  		return;
+  }
+  if (zipcode4.length > 0 && isNaN(zipcode) == true)
+  {
+  		document.getElementById("searchresultMessage").innerHTML="Zip code extension must be a 4 digit integer or left blank";
+  		return;
+  }
+  document.getElementById("searchresultMessage").innerHTML="";
+  if (window.XMLHttpRequest) 
+  {
+    // code for IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttp=new XMLHttpRequest();
+  } else 
+  {  // code for IE6, IE5
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xmlhttp.onreadystatechange=function() 
+  {
+    if (this.readyState==4 && this.status==200) 
+    {
+      document.getElementById("searchresult").innerHTML="Record Updated:<br/>"+this.responseText;
+      document.getElementById("searchresult").style.border="1px solid #A5ACB2";
+    }
+  }
+  xmlhttp.open("GET","addressinput.php?action=update&relid="+rowId+"&first="+first+"&middle="+middle+"&last="+last+"&addr1="+
+    addr1+"&addr2="+addr2+"&addr3="+addr3+"&city="+city+"&state="+
+    state+"&stateabbr="+stateabbr+"&zipcode="+zipcode+"&zipcode4="+zipcode4,true);
+  xmlhttp.send();
+}
+
+
+function editRecord(RowID)
+{
+	sessionStorage.setItem("last_display", document.getElementById("searchresult").innerHTML);
+	document.getElementById("searchresultMessage").innerHTML="";
+	
+	if (window.XMLHttpRequest) 
+  {
+    // code for IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttp=new XMLHttpRequest();
+  } else 
+  {  // code for IE6, IE5
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xmlhttp.onreadystatechange=function() 
+  {
+    if (this.readyState==4 && this.status==200) 
+    {
+      document.getElementById("searchresult").innerHTML="Enter desired changes and submit:<br/>"+this.responseText;
+      document.getElementById("searchresult").style.border="1px solid #A5ACB2";
+    }
+  }
+  xmlhttp.open("GET","addressinput.php?action=searchByRel&relId="+RowID);
+  xmlhttp.send();
+
+}
+
+function deleteRecord(RowID)
+{
+	alert("Delete "+RowID);
+}
+
+function cancelUpdate()
+{
+//	location.reload();
+  document.getElementById("searchresult").innerHTML = sessionStorage.getItem("last_display");
+  document.getElementById("searchresultMessage").innerHTML="";
+	
+}
+</script>
+</head>
+<body>
+
+Enter data in address fields desired for search (leave all blank to display all records on file)<p/>
+<form>
+Address Line 1: <input type="text" id="Addr1"/><br/>
+Address Line 2: <input type="text" id="Addr2"/><br/>
+Address Line 3: <input type="text" id="Addr3"/><br/>
+City: <input type="text" id="City"/><br/>
+State: <input type="text" id="State"/><br/>
+StateAbbr: <input type="text" id="StateAbbr"/><br/>
+Zip code: <input type="text" id="ZipCode"/> 4 digit zip ext: <input type="text" id="ZipCode4"/><br/>
+
+<button type="button"onclick="showResult()">Search</button> <p/>
+--OR--<br/>
+Enter data in address fields and person fields to add new record<br/>
+First Name: <input type="text" id="First"/><br/>
+Middle Name/Initial: <input type="text" id="Middle"/><br/>
+Last Name: <input type="text" id="Last"/><br/>
+
+<button type="button"onclick="addPerson()">Add New</button>
+</form>
+
+<div id="searchresult"></div>
+<div id="searchresultMessage"></div>
+</body>
+</html>

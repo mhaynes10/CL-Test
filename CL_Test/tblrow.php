@@ -5,7 +5,7 @@ abstract class TblRow
     protected $id;
     protected $active;
     
-    public function setId($id)
+   public function setId($id)
 	{
 		$this->id = $id;	
 	}
