@@ -23,7 +23,7 @@ class Search
 	}	
 	
 	
-	function buildWhereClauseA($address,$ignoreCond) // Builds a WHERE clause using only the address fields which are NOT empty.  
+	function buildWhereClauseA($address,$ignoreCond,$testActive) // Builds a WHERE clause using only the address fields which are NOT empty.  
 	{                                                // If $ignoreCond = true, all fields are used regardless  
 		$conj = ""; 		                             
 		$whereClause = "WHERE ";
@@ -66,8 +66,10 @@ class Search
 		{
 			$whereClause = $whereClause.$conj."ZipCode4 = "."'".$address->getZipCode4()."'";
 		}
-		$whereClause = $whereClause.$conj."address_tbl.Active = 1"; //Always set true in all searches. Allows to pull all active records
-																						//when all other field are empty. 
+		if($testActive) 
+		{		
+		   $whereClause = $whereClause.$conj."address_tbl.Active = 1"; //Allows to pull all active records
+		}																				   //when all other field are empty. 
 		return $whereClause;
 	}	
 
@@ -83,13 +85,14 @@ class Search
       return $rows; 
 	}
 
-	public function fetchAddress($address)
+	public function fetchAddress($address,$testActive)
 	{	
 		// This query is used to check for a duplicate address before insert 	
 
 		// Build WHERE Clause
 		$ignoreCond = true;			
-		$whereClause = $this->buildWhereClauseA($address, $ignoreCond);
+		$whereClause = $this->buildWhereClauseA($address, $ignoreCond, $testActive);
+		$whereClause = $whereClause." AND ID <> ".$address->getId(); 
 
 		// Build query string
     	$sqlQuery = "SELECT ID ,Addr1, Addr2, Addr3, City, State, StateAbbr, ZipCode, ZipCode4, Active from address_tbl ".$whereClause;
@@ -103,7 +106,7 @@ class Search
 		// This query is used to check for a duplicate person before insert 	
 
 		//Build WHERE clause		
-		$whereClause = "WHERE First = "."'".$person->getFirst()."' AND Middle = "."'".$person->getMiddle()."' AND Last = "."'".$person->getLast()."'"; 
+		$whereClause = "WHERE ID <> ".$person->getId()." AND First = "."'".$person->getFirst()."' AND Middle = "."'".$person->getMiddle()."' AND Last = "."'".$person->getLast()."'"; 
 		
 		// Build query string
     	$sqlQuery = "SELECT ID ,First, Middle, Last, Active from person_tbl ".$whereClause;
@@ -118,7 +121,7 @@ class Search
 		
 		//Build WHERE clause			
 		$ignoreCond = false;	
-		$whereClause = $this->buildWhereClauseA($address,$ignoreCond);
+		$whereClause = $this->buildWhereClauseA($address, $ignoreCond, true);
 		$whereClause = $whereClause." AND person_tbl.Active = 1 AND person_address_rel.Active = 1";
 		
 		// Build query string
@@ -138,7 +141,6 @@ class Search
 		$whereClause = "WHERE person_address_rel.ID = ".$relationId." AND address_tbl.Active = 1 AND person_tbl.Active = 1 AND person_address_rel.Active = 1";
 		
 		// Build query string
-		//$sqlQuery = "SELECT person_tbl.ID, First, Middle, Last, person_tbl.Active, person_address_rel.PersonID, person_address_rel.AddressID, address_tbl.ID ,Addr1, Addr2, Addr3, City, State, StateAbbr, ZipCode, ZipCode4, address_tbl.Active "
 		$sqlQuery = "SELECT person_address_rel.ID as RelID, person_tbl.ID, Last, First, Middle, person_tbl.Active, person_address_rel.PersonID, person_address_rel.AddressID, address_tbl.ID ,Addr1, Addr2, Addr3, City, State, StateAbbr, ZipCode, ZipCode4, address_tbl.Active "    	
     	."FROM address_tbl JOIN person_address_rel ON address_tbl.ID = person_address_rel.AddressID JOIN person_tbl ON person_address_rel.PersonID = person_tbl.ID "
     	.$whereClause;	
@@ -166,12 +168,56 @@ class Search
 	 	// This query is used to retrieve the ID of the relation record 	
 	 		
 		// Build query string
-    	$sqlQuery = "SELECT ID from person_address_rel WHERE PersonID = ".$personId." AND AddressID = ".$addressId.
-    	" AND Active = 1";
+    	$sqlQuery = "SELECT ID, Active from person_address_rel WHERE PersonID = ".$personId." AND AddressID = ".$addressId;
     	
     	// Run query and return result
       return $this->runQuery($sqlQuery); 
     }   
     
+    public function fetchPersonCount($addressId)
+	 {	
+	 	// This query is used to retrieve the count of persons attached to an address 	
+	 		
+		// Build query string
+    	$sqlQuery = "SELECT count(*) from person_address_rel WHERE AddressID = ".$addressId." AND Active = 1";
+    	
+    	// Run query and return result
+      return $this->runQuery($sqlQuery); 
+    }   
+
+    public function fetchAddressCount($personId)
+	 {	
+	 	// This query is used to retrieve the count of addresses attached to a person 	
+	 		
+		// Build query string
+    	$sqlQuery = "SELECT count(*) from person_address_rel WHERE PersonID = ".$personId." AND Active = 1";
+    	
+    	// Run query and return result
+      return $this->runQuery($sqlQuery); 
+    }   
+    
+  	public function fetchAddressById($addressId)
+	{	
+		// Simple search by ID		
+		// Build query string
+		$sqlQuery = "SELECT ID ,Addr1, Addr2, Addr3, City, State, StateAbbr, ZipCode, ZipCode4, Active "
+    	."FROM address_tbl WHERE ID = ".$addressId;	
+
+      // Run query and return result
+      return $this->runQuery($sqlQuery); 
+    }  
+
+  	public function fetchPersonById($personId)
+	{	
+		// Simple search by ID		
+		// Build query string
+		$sqlQuery = "SELECT ID ,First, Middle, Last, Active "
+    	."FROM person_tbl WHERE ID = ".$personId;	
+
+      // Run query and return result
+      return $this->runQuery($sqlQuery); 
+    }  
+
+
 }
 ?>

@@ -8,7 +8,7 @@ include_once 'person.php';
 include_once 'address.php';
 include_once 'dbfunctions.php';
 
-include_once 'addressfetch.php';
+include_once 'search.php';
 
 class TableRows extends RecursiveIteratorIterator 
 { 
@@ -66,11 +66,11 @@ function unitTestSearch()
   
     $conn = $dbMgr->dbConnect();
 
-    $addressFetch = new AddressFetch($conn);
+    $search = new Search($conn);
 
     $address = new Address(null, "", "outside", "", "", "", "", "", null);
-//    $rows = $addressFetch->fetchAddress($address);
-    $rows = $addressFetch->fetchPersonAddress($address);
+//    $rows = $search->fetchAddress($address);
+    $rows = $search->fetchPersonAddress($address);
 
     $dbMgr->dbDisconnect();
 
@@ -85,8 +85,8 @@ function unitTestSearch()
       }
     }
 		
-//	 echo "</table>";	
+	 echo "</table>";	
 }
 //unitTestInsert();
 
-unitTestSearch();
+//unitTestSearch();

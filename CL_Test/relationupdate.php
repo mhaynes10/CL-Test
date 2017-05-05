@@ -8,10 +8,10 @@ class RelationUpdate
         $this->conn = $conn;	
 	}	
 	
-	public function updateRelation($relId, $personId, $addressId)
+	public function updateRelation($relId, $personId, $addressId, $active)
 	{
 		// prepare Person-Address Relation sql and bind parameters
-    	$stmt = $this->conn->prepare("UPDATE person_address_rel SET PersonID = ".$personId.", AddressID = ".$addressId.
+    	$stmt = $this->conn->prepare("UPDATE person_address_rel SET PersonID = ".$personId.", AddressID = ".$addressId.", Active = ".$active.
 		" WHERE ID = ".$relId);	    	
      	
     	$stmt->execute();
