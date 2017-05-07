@@ -22,9 +22,10 @@ class Search
 		}
 	}	
 	
-	
-	function buildWhereClauseA($address,$ignoreCond,$testActive) // Builds a WHERE clause using only the address fields which are NOT empty.  
-	{                                                // If $ignoreCond = true, all fields are used regardless  
+	// Build a WHERE clause using only the address fields which are NOT empty.
+	// except when $ignoreCond = true, then all fields are used regardless
+	function buildWhereClauseA($address,$ignoreCond,$testActive)   
+	{                                                  
 		$conj = ""; 		                             
 		$whereClause = "WHERE ";
 		if ($ignoreCond || !$this->isEmpty($address->getAddr1())) 
@@ -73,22 +74,29 @@ class Search
 		return $whereClause;
 	}	
 
+	//Utility function to run queries
 	function runQuery($sqlQuery)
 	{
-		// prepare sql     	
-    	$stmt = $this->conn->prepare($sqlQuery);
-		$stmt->execute();
+		try
+		{		
+			// prepare sql     	
+	    	$stmt = $this->conn->prepare($sqlQuery);
+			$stmt->execute();
 		
-   	// set the resulting array to associative
-      $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-      $rows = $stmt->fetchAll();
+	   	// set the resulting array to associative
+	 	   $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+	      $rows = $stmt->fetchAll();
+		}
+		catch(PDOException $e)
+		{
+		   return $e->getMessage();
+		}    	
       return $rows; 
 	}
 
 	public function fetchAddress($address,$testActive)
 	{	
 		// This query is used to check for a duplicate address before insert 	
-
 		// Build WHERE Clause
 		$ignoreCond = true;			
 		$whereClause = $this->buildWhereClauseA($address, $ignoreCond, $testActive);
@@ -205,7 +213,7 @@ class Search
 
       // Run query and return result
       return $this->runQuery($sqlQuery); 
-    }  
+   }  
 
   	public function fetchPersonById($personId)
 	{	
@@ -216,8 +224,5 @@ class Search
 
       // Run query and return result
       return $this->runQuery($sqlQuery); 
-    }  
-
-
+   }  
 }
-?>

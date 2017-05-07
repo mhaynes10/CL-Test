@@ -10,11 +10,17 @@ class RelationDelete
 	
 	public function deleteRelation($relId)
 	{
-		// prepare Person-Address Relation sql and bind parameters
-    	$stmt = $this->conn->prepare("UPDATE person_address_rel SET Active = 0 WHERE ID = ".$relId);	    	
+		try
+		{
+			// prepare Person-Address Relation sql and bind parameters
+    		$stmt = $this->conn->prepare("UPDATE person_address_rel SET Active = 0 WHERE ID = ".$relId);	    	
      	
-    	$stmt->execute();
-    	
+    		$stmt->execute();
+    	}
+		catch(PDOException $e)
+		{
+			return $e->getMessage();
+		}    	
     	return true;
 	}
 }

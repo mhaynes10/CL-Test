@@ -10,12 +10,18 @@ class RelationUpdate
 	
 	public function updateRelation($relId, $personId, $addressId, $active)
 	{
-		// prepare Person-Address Relation sql and bind parameters
-    	$stmt = $this->conn->prepare("UPDATE person_address_rel SET PersonID = ".$personId.", AddressID = ".$addressId.", Active = ".$active.
-		" WHERE ID = ".$relId);	    	
+		try
+		{
+			// prepare Person-Address Relation sql and bind parameters
+	    	$stmt = $this->conn->prepare("UPDATE person_address_rel SET PersonID = ".$personId.", AddressID = ".$addressId.", Active = ".$active.
+			" WHERE ID = ".$relId);	    	
      	
-    	$stmt->execute();
-    	
+	    	$stmt->execute();
+		}
+		catch(PDOException $e)
+		{
+			return $e->getMessage();
+		}    	
     	return $relId;
 	}
 }

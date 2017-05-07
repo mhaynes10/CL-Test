@@ -24,5 +24,4 @@ abstract class TblRow
 	{
 		return $this->active;	
 	}	
-	
 }

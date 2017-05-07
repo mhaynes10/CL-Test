@@ -10,35 +10,41 @@ class AddressAdd
 	
 	public function insertAddress($address)
 	{
-		// prepare Address sql and bind parameters
-    	$stmt = $this->conn->prepare("INSERT INTO address_tbl (Addr1, Addr2, Addr3, City, State, StateAbbr, ZipCode, ZipCode4, Active)
-    	VALUES (:addr1, :addr2, :addr3, :city, :state, :stateAbbr, :zipCode, :zipCode4, :active)");
-    	$stmt->bindParam(':addr1', $addr1);
-    	$stmt->bindParam(':addr2', $addr2);
-    	$stmt->bindParam(':addr3', $addr3);
-    	$stmt->bindParam(':city', $city);
-    	$stmt->bindParam(':state', $state);
-    	$stmt->bindParam(':stateAbbr', $stateAbbr);
-    	$stmt->bindParam(':zipCode', $zipCode);
-    	$stmt->bindParam(':zipCode4', $zipCode4);
-    	$stmt->bindParam(':active', $addrActive);
+		try 
+    	{		
+			// prepare Address sql and bind parameters
+    		$stmt = $this->conn->prepare("INSERT INTO address_tbl (Addr1, Addr2, Addr3, City, State, StateAbbr, ZipCode, ZipCode4, Active)
+    		VALUES (:addr1, :addr2, :addr3, :city, :state, :stateAbbr, :zipCode, :zipCode4, :active)");
+    		$stmt->bindParam(':addr1', $addr1);
+    		$stmt->bindParam(':addr2', $addr2);
+    		$stmt->bindParam(':addr3', $addr3);
+    		$stmt->bindParam(':city', $city);
+    		$stmt->bindParam(':state', $state);
+    		$stmt->bindParam(':stateAbbr', $stateAbbr);
+    		$stmt->bindParam(':zipCode', $zipCode);
+    		$stmt->bindParam(':zipCode4', $zipCode4);
+    		$stmt->bindParam(':active', $addrActive);
     	
-    	// insert Address row
-    	$addr1 = $address->getAddr1();
-    	$addr2 = $address->getAddr2();
-    	$addr3 = $address->getAddr3();
-    	$city = $address->getCity();
-    	$state = $address->getState();
-    	$stateAbbr = $address->getStateAbbr();
-    	$zipCode = $address->getZipCode();
-    	$zipCode4 = $address->getZipCode4();
-    	$addrActive = $address->isActive();
+  			// insert Address row
+  			$addr1 = $address->getAddr1();
+  			$addr2 = $address->getAddr2();
+  			$addr3 = $address->getAddr3();
+  			$city = $address->getCity();
+ 			$state = $address->getState();
+ 			$stateAbbr = $address->getStateAbbr();
+  			$zipCode = $address->getZipCode();
+  			$zipCode4 = $address->getZipCode4();
+  			$addrActive = $address->isActive();
 
-		$stmt->execute();
+			$stmt->execute();
 		
-		// fetch new ID
-		$lastAddressId = $this->conn->lastInsertId();
-
+			// fetch new ID
+			$lastAddressId = $this->conn->lastInsertId();
+		}
+  		catch(PDOException $e)
+  		{
+  			return $e->getMessage();
+  		}
      	return $lastAddressId;
 	}
 }

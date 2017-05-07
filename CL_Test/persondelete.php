@@ -1,6 +1,6 @@
 <?php
 namespace CL_Test\V1;
-class PersonDelete extends DbManager
+class PersonDelete 
 {
 	private $conn;
 	public function __construct($conn)
@@ -10,10 +10,16 @@ class PersonDelete extends DbManager
 	
 	public function deletePerson($personId)
 	{
-		// prepare Person sql and bind parameters
-    	$stmt = $this->conn->prepare("UPDATE person_tbl SET Active = 0 WHERE ID = ".$personId);
-    	$stmt->execute();
-
+		try
+		{
+			// prepare Person sql and bind parameters
+	    	$stmt = $this->conn->prepare("UPDATE person_tbl SET Active = 0 WHERE ID = ".$personId);
+	    	$stmt->execute();
+		}
+		catch(PDOException $e)
+		{
+  			return $e->getMessage();
+		}
      	return true;
 	}
 }

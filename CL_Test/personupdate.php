@@ -1,6 +1,6 @@
 <?php
 namespace CL_Test\V1;
-class PersonUpdate extends DbManager
+class PersonUpdate 
 {
 	private $conn;	
 	public function __construct($conn)
@@ -10,13 +10,19 @@ class PersonUpdate extends DbManager
 	
 	public function updatePerson($person)
 	{
-		// prepare Person sql and bind parameters
-    	$stmt = $this->conn->prepare("UPDATE person_tbl SET First = '".$person->getFirst()."', Middle = '".$person->getMiddle().
-    	"', Last = '".$person->getLast()."', Active = ".$person->isActive().
-    	" WHERE ID = ".$person->getID());
+		try
+		{
+			// prepare Person sql and bind parameters
+	    	$stmt = $this->conn->prepare("UPDATE person_tbl SET First = '".$person->getFirst()."', Middle = '".$person->getMiddle().
+	    	"', Last = '".$person->getLast()."', Active = ".$person->isActive().
+	    	" WHERE ID = ".$person->getID());
     	
-    	$stmt->execute();
-
+	    	$stmt->execute();
+		}
+		catch(PDOException $e)
+		{
+			return $e->getMessage();
+		}
      	return $person->getID();
 	}
 }

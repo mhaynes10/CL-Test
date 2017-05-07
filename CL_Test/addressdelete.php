@@ -1,6 +1,6 @@
 <?php
 namespace CL_Test\V1;
-class AddressDelete extends DbManager
+class AddressDelete 
 {
 	private $conn;
 	public function __construct($conn)
@@ -10,10 +10,16 @@ class AddressDelete extends DbManager
 	
 	public function deleteAddress($addressId)
 	{
-		// prepare Person sql and bind parameters
-    	$stmt = $this->conn->prepare("UPDATE address_tbl SET Active = 0 WHERE ID = ".$addressId);
-    	$stmt->execute();
-
+		try
+		{		
+			// prepare Person sql
+    		$stmt = $this->conn->prepare("UPDATE address_tbl SET Active = 0 WHERE ID = ".$addressId);
+    		$stmt->execute();
+		}
+		catch(PDOException $e)
+  		{
+  			return $e->getMessage();
+  		}
      	return true;
 	}
 }
