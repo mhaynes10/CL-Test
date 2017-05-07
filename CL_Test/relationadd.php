@@ -10,6 +10,8 @@ class RelationAdd
 	
 	public function insertRelation($personId, $addressId)
 	{
+		try 
+   	{		
 		// prepare Person-Address Relation sql and bind parameters
     	$stmt = $this->conn->prepare("INSERT INTO person_address_rel (PersonID, AddressID, Active)
     	VALUES (:personID, :addressID, :active)");
@@ -23,10 +25,13 @@ class RelationAdd
     	$relationActive = true;
     	
     	$stmt->execute();
-    	
+		}
+		catch(PDOException $e)
+		{
+			return $e->getMessage();
+		}    	
     	// fetch new ID
     	$lastRelationId = $this->conn->lastInsertId();
-
     	return $lastRelationId;
 	}
 }

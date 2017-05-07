@@ -1,0 +1,427 @@
+<html>
+<head>
+<title>Classy Llama - Test Project</title>
+	<meta charset="utf-8"/>
+  	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  	<link rel="stylesheet" href="w3.css"/>
+  	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
+  	<style>
+	 #contentHeading {
+    background: gray;
+  	 background: linear-gradient(to right bottom, #8888aa, gray);
+  	 text-align:center; 
+  	 display:table; 
+  	 box-shadow: 0px 0px 20px black inset, 0px 0px 40px gray;
+    position: absolute;
+    width: 100%;
+    height: 122px;
+    top: 0;
+    left: 0;
+	 }    
+    
+    #leftNavColumn {
+    background: transparent;
+    position: absolute;
+    width: 290px;
+    height: 200%;
+    top: 122;
+    left: 20;
+    }
+    
+    #contentColumn {
+    background: transparent;
+    position: absolute;
+    width: 75%;
+    height: 200%;
+    top: 122;
+    left: 320;
+    }
+    
+  	.my_gradient01 {
+		background: black;
+  		background: linear-gradient(to right bottom, #666688, black);
+	}
+	.my_gradient02 {
+		background: gray;
+  		background: linear-gradient(to right bottom, #8888aa, gray);
+	}
+	.my_gradient03 {
+		background: #444444;
+  		background: linear-gradient(to right, #aaaaaa, #444444);
+	}
+	.my_gradient04 {
+		background: gray;
+  		background: linear-gradient(to right bottom, whitesmoke, gray);
+  		width: 100%;
+  		height: 200%;
+	}
+	.w3-tangerine {
+    font-family: "Tangerine", serif; 
+    
+    }
+    
+    input.textBox {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: 30px;
+    width: 180px;
+    font-size: 15px;
+    font-family: Verdana;
+    line-height: 30px;
+    display:inline-block; 
+    *display: inline;     /* for IE7*/
+    zoom:1;              /* for IE7*/
+    vertical-align:middle;
+	}
+
+label.inputLabel {
+ 	 margin-top: 5px;
+    margin-bottom: 5px;
+    font-family: Verdana;
+    font-size: 15px;
+    line-height: 30px;
+    display:inline-block;
+    *display: inline;     /* for IE7*/
+    zoom:1;              /* for IE7*/
+	}
+
+  	</style>
+  	
+<script>
+
+var errorMessage;
+function showResult() 
+{
+  var addr1 = document.getElementById("Addr1").value.trim();
+  var addr2 = document.getElementById("Addr2").value.trim();
+  var addr3 = document.getElementById("Addr3").value.trim();
+  var city = document.getElementById("City").value.trim();
+  var state = document.getElementById("State").value.trim();
+  var stateabbr = document.getElementById("StateAbbr").value.trim();
+  var zipcode = document.getElementById("ZipCode").value.trim();
+  var zipcode4 = document.getElementById("ZipCode4").value.trim();
+  document.getElementById("searchresultMessage").innerHTML="";
+  if (window.XMLHttpRequest) 
+  {
+    // code for IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttp=new XMLHttpRequest();
+  } else 
+  {  // code for IE6, IE5
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xmlhttp.onreadystatechange=function() 
+  {
+    if (this.readyState==4 && this.status==200) 
+    {
+      document.getElementById("searchresult").innerHTML=this.responseText;
+      document.getElementById("searchresult").style.border="1px solid #A5ACB2";
+    }
+  }
+  xmlhttp.open("GET","viewinterface.php?action=search&addr1="+addr1+"&addr2="+addr2+"&addr3="+addr3+"&city="+city+"&state="+
+    state+"&stateabbr="+stateabbr+"&zipcode="+zipcode+"&zipcode4="+zipcode4,true);
+  xmlhttp.send();
+}
+
+function validate(addr1, addr2, addr3, city, state, stateabbr, zipcode, zipcode4, first, middle, last)
+{
+  errorMessage = "";  
+  var addressString = addr1+addr2+addr3+city+state+stateabbr+zipcode+zipcode4;	  
+  
+  if (addressString.length == 0) 
+  {
+  		errorMessage = "Address must be filled in to submit new record";
+  }
+  else if (first.length == 0) 
+  {
+  		errorMessage = "First Name must not be blank";
+  }
+  else if (last.length == 0) 
+  {
+  		errorMessage = "Last Name must not be blank";
+  }
+  else if (addr1.length == 0)
+  {
+  		errorMessage = "Address Line 1 must not be blank";
+  }
+  else if (city.length == 0)
+  {
+  		errorMessage = "City must not be blank";
+  }
+  else if (state.length == 0 && stateabbr.length == 0)
+  {
+  		errorMessage = "State must not be blank";
+  }
+  else if (stateabbr.length == 1 || stateabbr.length > 2)
+  {
+  		errorMessage = "State Abbreviation must contain two characters";
+  }
+  else if (zipcode.length == 0)
+  {
+  		errorMessage = "Zip code must not be blank";
+  }
+  else if (zipcode.length != 5)
+  {
+  		errorMessage = "Zip code must be 5 digits";
+  }
+  else if (zipcode4.length != 0 && zipcode4.length != 4)
+  {
+		errorMessage = "Zip code extension must be 4 digits or left blank";
+  }
+  else if (isNaN(zipcode) == true)
+  {
+  		errorMessage = "Zip code must be a 5 digit integer";
+  }
+  else if (zipcode4.length > 0 && isNaN(zipcode) == true)
+  {
+  		errorMessage = "Zip code extension must be a 4 digit integer or left blank";
+  }
+}
+
+
+function addPerson()
+{
+  var addr1 = document.getElementById("Addr1").value.trim();
+  var addr2 = document.getElementById("Addr2").value.trim();
+  var addr3 = document.getElementById("Addr3").value.trim();
+  var city = document.getElementById("City").value.trim();
+  var state = document.getElementById("State").value.trim();
+  var stateabbr = document.getElementById("StateAbbr").value.trim();
+  var zipcode = document.getElementById("ZipCode").value.trim();
+  var zipcode4 = document.getElementById("ZipCode4").value.trim();
+
+  var first = document.getElementById("First").value.trim();
+  var middle = document.getElementById("Middle").value.trim();
+  var last = document.getElementById("Last").value.trim();
+  
+  validate(addr1, addr2, addr3, city, state, stateabbr, zipcode, zipcode4, first, middle, last);
+  if (errorMessage != "") 
+  {
+  		document.getElementById("addRecordMessage").innerHTML=errorMessage;
+  		return;	
+  }
+  document.getElementById("addRecordMessage").innerHTML="";
+  
+  if (window.XMLHttpRequest) 
+  {
+    // code for IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttp=new XMLHttpRequest();
+  } else 
+  {  // code for IE6, IE5
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xmlhttp.onreadystatechange=function() 
+  {
+    if (this.readyState==4 && this.status==200) 
+    {
+		document.getElementById("searchresult").innerHTML=this.responseText;      
+      document.getElementById("searchresult").style.border="1px solid #A5ACB2";
+    }
+  }
+  xmlhttp.open("GET","viewinterface.php?action=add&first="+first+"&middle="+middle+"&last="+last+"&addr1="+
+    addr1+"&addr2="+addr2+"&addr3="+addr3+"&city="+city+"&state="+
+    state+"&stateabbr="+stateabbr+"&zipcode="+zipcode+"&zipcode4="+zipcode4,true);
+  xmlhttp.send();
+}
+
+function submitChange(rowId)
+{
+  var addr1 = document.getElementById("Addr1X").value.trim();
+  var addr2 = document.getElementById("Addr2X").value.trim();
+  var addr3 = document.getElementById("Addr3X").value.trim();
+  var city = document.getElementById("CityX").value.trim();
+  var state = document.getElementById("StateX").value.trim();
+  var stateabbr = document.getElementById("StateAbbrX").value.trim();
+  var zipcode = document.getElementById("ZipCodeX").value.trim();
+  var zipcode4 = document.getElementById("ZipCode4X").value.trim();
+
+  var first = document.getElementById("FirstX").value.trim();
+  var middle = document.getElementById("MiddleX").value.trim();
+  var last = document.getElementById("LastX").value.trim();
+  
+  var single = 0;	  
+  if(document.getElementById('single'))
+  {
+	  if(document.getElementById('single').checked)
+	  {
+	     single = 1;
+	  } 
+	  else 
+	  {
+	  	  single = 0;
+	  } 
+  }
+  	  		
+  validate(addr1, addr2, addr3, city, state, stateabbr, zipcode, zipcode4, first, middle, last);
+  if (errorMessage != "") 
+  {
+  		document.getElementById("searchresultMessage").innerHTML=errorMessage;
+		document.getElementById("searchresultMessage").style.color="red";
+  		return;	
+  }
+
+  document.getElementById("searchresultMessage").innerHTML="";
+  if (window.XMLHttpRequest) 
+  {
+    // code for IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttp=new XMLHttpRequest();
+  } else 
+  {  // code for IE6, IE5
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xmlhttp.onreadystatechange=function() 
+  {
+    if (this.readyState==4 && this.status==200) 
+    {
+	   document.getElementById("searchresult").innerHTML=this.responseText;
+      document.getElementById("searchresult").style.border="1px solid #A5ACB2";
+    }
+  }
+  xmlhttp.open("GET","viewinterface.php?action=update&relId="+rowId+"&first="+first+"&middle="+middle+"&last="+last+"&addr1="+
+    addr1+"&addr2="+addr2+"&addr3="+addr3+"&city="+city+"&state="+
+    state+"&stateabbr="+stateabbr+"&zipcode="+zipcode+"&zipcode4="+zipcode4+"&single="+single,true);
+  xmlhttp.send();
+}
+
+function submitDelete(rowId)
+{
+
+  document.getElementById("searchresultMessage").innerHTML="";
+  if (window.XMLHttpRequest) 
+  {
+    // code for IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttp=new XMLHttpRequest();
+  } else 
+  {  // code for IE6, IE5
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xmlhttp.onreadystatechange=function() 
+  {
+    if (this.readyState==4 && this.status==200) 
+    {
+      document.getElementById("searchresult").innerHTML=this.responseText;
+      document.getElementById("searchresult").style.border="1px solid #A5ACB2";
+    }
+  }
+  xmlhttp.open("GET","viewinterface.php?action=delete&relId="+rowId);
+  xmlhttp.send();
+}
+
+
+function editRecord(RowID)
+{
+	sessionStorage.setItem("last_display", document.getElementById("searchresult").innerHTML);
+	document.getElementById("searchresultMessage").innerHTML="";
+	
+	if (window.XMLHttpRequest) 
+  {
+    // code for IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttp=new XMLHttpRequest();
+  } else 
+  {  // code for IE6, IE5
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xmlhttp.onreadystatechange=function() 
+  {
+    if (this.readyState==4 && this.status==200) 
+    {
+      document.getElementById("searchresultMessage").innerHTML="Enter desired changes and submit:";
+      document.getElementById("searchresult").innerHTML=this.responseText;
+      document.getElementById("searchresult").style.border="1px solid #A5ACB2";
+    }
+  }
+  xmlhttp.open("GET","viewinterface.php?action=updateRequest&relId="+RowID);
+  xmlhttp.send();
+
+}
+
+function deleteRecord(RowID)
+{
+	sessionStorage.setItem("last_display", document.getElementById("searchresult").innerHTML);
+	document.getElementById("searchresultMessage").innerHTML="Please <button type='button' onclick='submitDelete("+
+	RowID+")'>Confirm</button> or <button type='button' onclick='cancelAction()'>Cancel</button> the delete rquest";
+}
+
+function cancelAction()
+{
+  document.getElementById("searchresult").innerHTML = sessionStorage.getItem("last_display");
+  document.getElementById("searchresultMessage").innerHTML="";
+	
+}
+</script>
+  	
+</head>
+	<body class="my_gradient04">
+		<div id="contentHeading" class="w3-tangerine">
+			<span style="color:#cccccc; font-size:4vw; display:table-cell; 
+			vertical-align:middle;">Classy Llama Test Project</span>
+		</div>
+		<div style="clear:left;"></div>
+		<div id="leftNavColumn">		
+			<form style=" margin-top: 20px; font-size:calc(10px + 0.5vw);">
+				Enter one or more address fields for a search.<br/>
+				<span id="addRecordMessage" style="color:#ee0000;"></span>
+				<h4>Address</h4>
+				<div style="text-align:right;width:100px;float:left;">
+					<label class="inputLabel" for="Addr1">Address Line 1:</label><br/>
+					<label class="inputLabel" for="Addr2">Address Line 2:</label><br/>
+					<label class="inputLabel" for="Addr3">Address Line 3:</label><br/>
+					<label class="inputLabel" for="City">City:</label><br/>
+					<label class="inputLabel" for="State">State:</label><br/>
+					<label class="inputLabel" for="StateAbbr">State Abbr:</label><br/>
+					<label class="inputLabel" for="ZipCode">Zip Code:</label><br/>
+					<label class="inputLabel" for="ZipCode4">4 digit zip ext:</label><br/>
+				</div>
+				<div style="text-align:left;width:180px;float:right;">
+					<input class="textBox" type="text" id="Addr1"/><br/>
+					<input class="textBox" type="text" id="Addr2"/><br/>
+					<input class="textBox" type="text" id="Addr3"/><br/>
+					<input class="textBox" type="text" id="City"/><br/>
+					<input class="textBox" type="text" id="State"/><br/>
+					<input class="textBox" type="text" id="StateAbbr"/><br/>
+					<input class="textBox" type="text" id="ZipCode"/><br/>
+					<input class="textBox" type="text" id="ZipCode4"/><br/>
+				</div>
+				<div style="width:280px;float:left;">
+					<button type="button"onclick="showResult()">Search</button><br/>
+					<hr/> 
+				</div>
+				Enter complete address and person data to add new record.</br>
+				<h4>Person</h4>
+				<div style="text-align:right;width:100px;float:left;">
+					<label class="inputLabel" for="First">First Name:</label><br/>
+					<label class="inputLabel" for="Middle">Middle Name:</label><br/>
+					<label class="inputLabel" for="Last">Last Name:</label><br/>	
+				</div>
+				<div style="text-align:left;width:180px;float:right;">
+					<input class="textBox" type="text" id="First"/><br/>
+					<input class="textBox" type="text" id="Middle"/><br/>
+					<input class="textBox" type="text" id="Last"/><br/>
+				</div>
+				<div style="width:280px;float:left;">
+					<button type="button"onclick="addPerson()">Add New</button>
+				</div>
+				<div style="width:280px;float:left;">
+					<hr/>
+				</div>
+			</form>
+  			<div style="clear:left;"></div>
+  			<div style="color:#7755cc; height:16px; margin: 8px 16px 0 16px; clear: left;">&copy; 2017 Michael W. Haynes</div>
+		</div>
+		
+		<div id="contentColumn">
+			<div style="margin:12px 12px 12px 12px;">		
+				<span style="font-size:calc(12px + 1vw); color:whitesmoke; text-shadow: 2px 2px 4px #000000;">Person - Address Database Application</span>
+				<div id="searchresultMessage" style="font-size:calc(18px + 0.5vw);"></div>
+				<div id="searchresult" style="font-size:calc(1vw);">
+					<span style="font-size:calc(6px + 1vw);">
+						Welcome! <br/>
+						If you would like to search records, please enter data in one or more address fields, and click the Search button.<br/>
+						<em>Note: Leave all fields blank if you would like to see all records on file.</em><p/>
+						If you would like to add a new record, please enter a complete address and a person's name, and click the Add New button.<br/>
+						<em>Note: Middle name is optional.</em><p/>
+					</span>
+				</div>
+	  		</div>
+		</div>
+	</body>
+</html>
