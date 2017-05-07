@@ -19,7 +19,7 @@
     left: 0;
 	 }    
     
-    #leftNavColumn {
+    #leftColumn {
     background: transparent;
     position: absolute;
     width: 290px;
@@ -178,7 +178,7 @@ function validate(addr1, addr2, addr3, city, state, stateabbr, zipcode, zipcode4
 }
 
 
-function addPerson()
+function addRecord()
 {
   var addr1 = document.getElementById("Addr1").value.trim();
   var addr2 = document.getElementById("Addr2").value.trim();
@@ -356,7 +356,7 @@ function cancelAction()
 			vertical-align:middle;">Classy Llama Test Project</span>
 		</div>
 		<div style="clear:left;"></div>
-		<div id="leftNavColumn">		
+		<div id="leftColumn">		
 			<form style=" margin-top: 20px; font-size:calc(10px + 0.5vw);">
 				Enter one or more address fields for a search.<br/>
 				<span id="addRecordMessage" style="color:#ee0000;"></span>
@@ -398,7 +398,7 @@ function cancelAction()
 					<input class="textBox" type="text" id="Last"/><br/>
 				</div>
 				<div style="width:280px;float:left;">
-					<button type="button"onclick="addPerson()">Add New</button>
+					<button type="button"onclick="addRecord()">Add New</button>
 				</div>
 				<div style="width:280px;float:left;">
 					<hr/>
