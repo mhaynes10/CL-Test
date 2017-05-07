@@ -11,7 +11,7 @@ The IDE used for development was Bluefish, and phpMyAdmin was used for the datab
 index.html is the starting page.
 
 Note on file management: I typically would not throw a whole project into just one folder. This project is rather small, 
-- so I made an exception.
+so I made an exception.
 
 Basic Application Flow:
 viewinterface.php gets the requests from index.html, accesses the necessary objects to fulfill requests and sends back content.
@@ -26,8 +26,8 @@ relationadd.php, relationdelete.php, relationupdate.
 dbfunctions.php accesses the Search object in search.php to do any utilty searches it needs.
 
 Note on database delete functions: This projects utilized "soft delete" instead of "hard deletes" on the data base. 
-- An "Active" column was included in each table, and record was considered "deleted" when set to 0 (false). This provided
-- the bonus of "undeleting" a record if the user decided to add it again. 
+An "Active" column was included in each table, and record was considered "deleted" when set to 0 (false). This provided
+the bonus of "undeleting" a record if the user decided to add it again. 
 
 tblrow.php contains an abstract class (TblRow) used to create Person and Address.
 
