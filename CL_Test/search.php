@@ -109,13 +109,16 @@ class Search
 		return $this->runQuery($sqlQuery);  
     }
     
-   public function fetchPerson($person)
+   public function fetchPerson($person,$testActive)
 	{		
 		// This query is used to check for a duplicate person before insert 	
 
 		//Build WHERE clause		
 		$whereClause = "WHERE ID <> ".$person->getId()." AND First = "."'".$person->getFirst()."' AND Middle = "."'".$person->getMiddle()."' AND Last = "."'".$person->getLast()."'"; 
-		
+		if($testActive) 
+		{		
+		   $whereClause = $whereClause." AND Active = 1"; 
+		}																				    
 		// Build query string
     	$sqlQuery = "SELECT ID ,First, Middle, Last, Active from person_tbl ".$whereClause;
 		

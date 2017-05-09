@@ -69,12 +69,10 @@ function unitTestSearch()
     $search = new Search($conn);
 
     $address = new Address(null, "", "outside", "", "", "", "", "", null);
-//    $rows = $search->fetchAddress($address);
     $rows = $search->fetchPersonAddress($address);
 
     $dbMgr->dbDisconnect();
 
-//    print_r($rows);
     echo "<table style='border: solid 1px black;'>";
 	 echo "<tr><th>Select</th><th>First</th><th>Middle</th><th>Last</th><th>Addr1</th><th>Addr2</th><th>Addr3</th><th>City</th><th>State</th><th>StateAbbr</th><th>ZipCode</th><th>ZipCode4</th></tr>";
     foreach(new TableRows(new RecursiveArrayIterator($rows)) as $k=>$v) 
