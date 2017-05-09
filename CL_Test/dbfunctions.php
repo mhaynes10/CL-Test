@@ -48,7 +48,8 @@ class DbFunctions
 		$address->setId(0);		
 
 		//First we use $search to find any Person records matching the $person to be added
-		$personRows = $search->fetchPerson($person);
+		$testActive = false;		
+		$personRows = $search->fetchPerson($person, $testActive);
 
 		//If found, we instantiate a new Person as $foundPerson, constructed with the found data and set the ID accordingly
 		if(count($personRows) > 0)
@@ -98,10 +99,7 @@ class DbFunctions
 
 		//Last but not least is the relation linking the Person with the Address; same basic scenario...
 
-		//Note: Hindsight tells me as I go through commenting my code, that this "if" block and the two above could be refactored
-		//into a single function with an outside call to instantiate the respective "found" objects. 
-
-		//Note 2: I didn't make a class for Relation. I probably should have..
+		//Note: I didn't make a class for Relation. I probably should have..
 		$relationRows = $search->fetchRelation($personId, $addressId);
 		if(count($relationRows) > 0) 
 		{
@@ -134,38 +132,47 @@ class DbFunctions
 		$person->setId($result[0]['PersonID']);
 		$address->setId($result[0]['AddressID']);
 		
+      $personId = $person->getId();	
 		$addressId = $address->getId();
 		$relationId = $relId;
-				
-		$personRows = $search->fetchPerson($person);
+		
+		$testActive = false;		
+		$personRows = $search->fetchPerson($person, $testActive);
 
-		//If a person matching the updated person is found...
-		//I decided to throw an error back to the user if the updated Person data
-		//matched an already existing record. So I pass back a 0 as the Person ID to indicate no update
-		//due to duplicate record. 
 		if(count($personRows) > 0)
-		{
-			$ids = array(0, $addressId, $relationId);
-			return $ids;		
-		} 
-		else 
-		//Otherwise
-		{		
-		   $personId = $this->personUpdate->updatePerson($person);
-		}
+      {
+          //If found, we instantiate a new Person as $foundPerson, constructed with the found data and set the ID accordingly
+	       $foundPerson = new Person($personRows[0]["First"], $personRows[0]["Middle"], $personRows[0]["Last"], $personRows[0]["Active"]);			
+			 $foundPerson->setId($personRows[0]["ID"]);			
+			 //If the record found was previously "deleted," we "undelete" by setting Active to true and updating the record			
+			 if($foundPerson->isActive() == false) 
+			 {
+			     $foundPerson->setActive(true);
+			     $this->personUpdate->updatePerson($foundPerson);
+ 			     $this->personDelete->deletePerson($personId);
+ 				  $personId = $foundPerson->getId();
+   		 }
+   		 else
+		    {
+				  //If an Active person matching the updated person is found...
+				  //I decided to throw an error back to the user if the updated Person data
+				  //matched an already existing Active record. So I pass back a 0 as the Person ID to indicate no update
+				  //due to duplicate record. 
+
+			     $ids = array(0, $addressId, $relationId);
+			     return $ids;		
+		    } 
+		 }
+		 //Otherwise
+		 else
+		 {		
+		    $personId = $this->personUpdate->updatePerson($person);
+		 }
 		
 		//If an address matching the updated address is found...
 		//I decided to make accommodations for a duplicate Address similar to what I did with dbInsert,
-		//that I didn't make for a duplicate Person.
-		//My primary reason was that I had actually done the coding for the Address scenario first, and trying to 
-		//accomplish the same thing with Person without totally hosing what I had done so far was something I didn't want to tackle.
 		
-		//That said, if this were a real-world project, I would have either plowed forward with doing the same for Person,
-		//or I would back up and see if I could take a different approach altogether.
-
-		//Anyhoo...
-		//We only want to check for active records in this duplicate search, so $testActive is set to true.
-		$testActive = true;
+		$testActive = false;
 		$addressRows = $search->fetchAddress($address,$testActive);
 		if(count($addressRows) > 0) 
 		{
@@ -175,13 +182,36 @@ class DbFunctions
 			//If not, we'll remove the address.
 			$personCountArray = $search->fetchPersonCount($addressId);
          $personCount = $personCountArray[0]['count(*)'];
-         if($personCount == 0) 
-         {
-         	$this->addressDelete->deleteAddress($addressId);
-         }
-         //We'll let dbInsert handle it from here, since it handles the duplicate issue by creating a new relation
-         //and using the existing IDs of the Person duplicate and/or Address duplicate.
-			$ids = $this->dbInsert($person, $address, $search);
+ 
+         //If found, we instantiate a new Address as $foundAddress, constructed with the found data and set the ID accordingly
+			$foundAddress = new Address($addressRows[0]["Addr1"], $addressRows[0]["Addr2"], $addressRows[0]["Addr3"], $addressRows[0]["City"],
+			                           $addressRows[0]["State"], $addressRows[0]["StateAbbr"], $addressRows[0]["ZipCode"], $addressRows[0]["ZipCode4"],
+			                           $addressRows[0]["Active"]);			
+			$foundAddress->setId($addressRows[0]["ID"]);	
+			
+			//No other person attached to this address? We can delete it
+          if($personCount == 0 || $single == 0) 
+          {
+          	   $this->addressDelete->deleteAddress($addressId);
+          }
+			 
+			 //If the record found was previously "deleted," we "undelete" by setting Active to true and updating the record			
+			 if($foundAddress->isActive() == false) 
+			 {
+			     $foundAddress->setActive(true);
+			     $this->addressUpdate->updateAddress($foundAddress);
+   		 }
+			 if($single == 0) //The address change is not reserved for one person only, so we update it's ID in the relation table 
+			 {
+			 	  $foundAddressId = $foundAddress->getId();
+			 	  $this->relationUpdate->updateAddressRelation($addressId, $foundAddressId);
+			 }
+			 $addressId = $foundAddress->getId();
+         
+          //We'll let dbInsert handle it from here, since it handles the duplicate issue by creating a new relation
+          //and using the existing IDs of the Person duplicate and/or Address duplicate.
+			 $ids = $this->dbInsert($person, $address, $search);
+			
 			// (We'll be returning these)
 			$personId = $ids[0];
 			$addressId = $ids[1];
@@ -254,5 +284,4 @@ class DbFunctions
 			return $address;
 		}
 	}
-
 }

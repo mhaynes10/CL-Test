@@ -12,7 +12,7 @@ class RelationUpdate
 	{
 		try
 		{
-			// prepare Person-Address Relation sql and bind parameters
+			// prepare Person-Address Relation sql 
 	    	$stmt = $this->conn->prepare("UPDATE person_address_rel SET PersonID = ".$personId.", AddressID = ".$addressId.", Active = ".$active.
 			" WHERE ID = ".$relId);	    	
      	
@@ -23,5 +23,22 @@ class RelationUpdate
 			return $e->getMessage();
 		}    	
     	return $relId;
+	}
+	
+	public function updateAddressRelation($addressId, $foundAddressId)
+	{
+		try
+		{
+			// prepare Address Relation sql 
+	    	$stmt = $this->conn->prepare("UPDATE person_address_rel SET AddressID = ".$foundAddressId." WHERE AddressID = ".$addressId.
+	    	" AND Active = 1");	    	
+     	
+	    	$stmt->execute();
+		}
+		catch(PDOException $e)
+		{
+			return $e->getMessage();
+		}    	
+    	return $addressId;
 	}
 }

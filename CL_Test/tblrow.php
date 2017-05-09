@@ -1,6 +1,6 @@
 <?php
 namespace CL_Test\V1;
-abstract class TblRow
+abstract class TblRow //The abstract parent for Person and Abstract
 {
     protected $id;
     protected $active;
